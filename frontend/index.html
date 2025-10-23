@@ -1,222 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="stylesheet.css">
-  <title>DB Project 1 new</title>
+<hr/>
+<h3>User Auth & Search (demo)</h3>
 
-  <!-- Added styles (no structural changes to your HTML) -->
-  <style>
-    /* Font (safe import) */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+<section id="register">
+  <h4>Register</h4>
+  <input id="r-username" placeholder="username">
+  <input id="r-password" placeholder="password" type="password">
+  <input id="r-first" placeholder="first name">
+  <input id="r-last" placeholder="last name">
+  <input id="r-salary" placeholder="salary" type="number" step="0.01">
+  <input id="r-age" placeholder="age" type="number">
+  <button id="btn-register">Register</button>
+</section>
 
-    :root{
-      --bg: #0b1020;
-      --panel: #121a33;
-      --text: #e8ecff;
-      --muted: #9aa7d1;
-      --accent: #5b8cff;
-      --accent-2: #22d3ee;
-      --danger: #ff6b6b;
-      --warn: #f59e0b;
-      --ok: #34d399;
-      --table-stripe: rgba(255,255,255,0.04);
-      --border: rgba(255,255,255,0.12);
-      --shadow: 0 10px 30px rgba(0,0,0,0.35);
-    }
-    @media (prefers-color-scheme: light) {
-      :root{
-        --bg: #f5f7ff;
-        --panel: #ffffff;
-        --text: #0b1020;
-        --muted: #5b6480;
-        --accent: #3b82f6;
-        --accent-2: #06b6d4;
-        --danger: #ef4444;
-        --warn: #f59e0b;
-        --ok: #10b981;
-        --table-stripe: rgba(0,0,0,0.035);
-        --border: rgba(0,0,0,0.12);
-        --shadow: 0 12px 24px rgba(0,0,0,0.08);
-      }
-    }
+<section id="login">
+  <h4>Sign In</h4>
+  <input id="l-username" placeholder="username">
+  <input id="l-password" placeholder="password" type="password">
+  <button id="btn-login">Login</button>
+</section>
 
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body{
-      margin: 0;
-      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 800px at 10% -10%, rgba(91,140,255,0.25), transparent 60%),
-                  radial-gradient(900px 600px at 110% 10%, rgba(34,211,238,0.22), transparent 55%),
-                  var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-    }
-    main{
-      max-width: 980px;
-      margin: clamp(20px, 6vw, 64px) auto;
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)) , var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      padding: clamp(18px, 4vw, 36px);
-      backdrop-filter: blur(6px);
-      transform: translateZ(0);
-    }
-    main::before{
-      content: "DB Project – Users";
-      display: block;
-      font-weight: 700;
-      letter-spacing: 0.2px;
-      margin-bottom: 18px;
-      font-size: clamp(18px, 2.2vw, 24px);
-      color: var(--muted);
-    }
-    label{
-      display: inline-block;
-      font-weight: 600;
-      margin-right: 10px;
-      color: var(--muted);
-    }
-    input[type="text"]{
-      appearance: none;
-      outline: none;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      color: var(--text);
-      padding: 12px 14px;
-      border-radius: 12px;
-      min-width: 240px;
-      transition: border-color .2s ease, box-shadow .2s ease, transform .06s ease;
-    }
-    input[type="text"]::placeholder{
-      color: rgba(154,167,209,0.85);
-    }
-    input[type="text"]:focus{
-      border-color: #7aa1ff;
-      box-shadow: 0 0 0 6px rgba(91,140,255,0.18);
-    }
-    button{
-      border: 0;
-      padding: 12px 16px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 700;
-      letter-spacing: .2px;
-      transition: transform .06s ease, box-shadow .2s ease, background.2s ease;
-      margin-left: 10px;
-      color: #fff;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      box-shadow: 0 8px 18px rgba(0,0,0,0.25);
-    }
-    button:hover{ transform: translateY(-1px); }
-    button:active{ transform: translateY(0); }
+<section id="user-searches">
+  <h4>Searches</h4>
+  <div>
+    <input id="s-first" placeholder="first (optional)">
+    <input id="s-last" placeholder="last (optional)">
+    <button id="btn-search-firstlast">Search by first/last</button>
+  </div>
+  <div>
+    <input id="s-username" placeholder="username">
+    <button id="btn-search-username">By username</button>
+  </div>
+  <div>
+    <input id="s-sal-min" placeholder="salary min" type="number" step="0.01">
+    <input id="s-sal-max" placeholder="salary max" type="number" step="0.01">
+    <button id="btn-search-salary">By salary range</button>
+  </div>
+  <div>
+    <input id="s-age-min" placeholder="age min" type="number">
+    <input id="s-age-max" placeholder="age max" type="number">
+    <button id="btn-search-age">By age range</button>
+  </div>
+  <div>
+    <input id="s-after-username" placeholder="registered after (username)">
+    <button id="btn-search-after">Registered after</button>
+  </div>
+  <div>
+    <button id="btn-never-signed">Never signed in</button>
+    <input id="s-same-username" placeholder="same day as (username)">
+    <button id="btn-same-day">Same day as</button>
+    <button id="btn-today">Registered today</button>
+  </div>
+</section>
 
-    /* Contextual buttons (IDs unchanged) */
-    #add-name-btn{ background: linear-gradient(135deg, var(--ok), #26b2a1); }
-    #search-btn{ background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
-
-    table{
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      margin-top: 22px;
-      background: rgba(0,0,0,0.02);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-    }
-    thead th{
-      text-align: left;
-      font-weight: 700;
-      color: var(--text);
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      font-size: 14px;
-      letter-spacing: .2px;
-    }
-    tbody td{
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: middle;
-      color: var(--text);
-    }
-    tbody tr:nth-child(odd){ background: var(--table-stripe); }
-
-    /* Buttons in table (classes come from your JS) */
-    button.delete-row-btn{
-      background: linear-gradient(135deg, var(--danger), #d94646);
-    }
-    button.edit-row-btn{
-      background: linear-gradient(135deg, var(--warn), #f08e09);
-      color: #111;
-      box-shadow: 0 6px 14px rgba(240, 142, 9, .25);
-    }
-
-    .no-data{
-      text-align: center;
-      color: var(--muted);
-      font-weight: 600;
-      padding: 20px 0;
-    }
-
-    #update-row{
-      margin-top: 22px;
-      padding: 16px;
-      border: 1px dashed var(--border);
-      border-radius: 14px;
-      background: linear-gradient(180deg, rgba(91,140,255,0.12), rgba(34,211,238,0.10));
-    }
-    #update-row label{ color: var(--text); }
-    #update-row button{ background: linear-gradient(135deg, var(--accent), var(--ok)); }
-
-    /* Collapse extra <br> visually (DOM unchanged) */
-    main > br + br + br { display: none; }
-    main > div{ margin-top: 18px; }
-
-    @media (max-width: 720px){
-      input[type="text"]{ min-width: 0; width: 100%; margin-top: 8px; }
-      label{ display:block; margin-bottom: 6px; }
-      button{ width: 100%; margin: 10px 0 0 0; }
-      main::before{ text-align: center; }
-      thead th, tbody td { padding: 12px 12px; }
-    }
-    main:focus-within{
-      box-shadow: 0 0 0 2px rgba(91,140,255,0.35), var(--shadow);
-    }
-  </style>
-</head>
-<body>
-  <main>
-      <label>Name:</label>
-      <input type="text" id="name-input">
-      <button id="add-name-btn">Add Name</button>
- 
-     <br><br><br>
-     <div> 
-        <input placeholder="search by name" id="search-input">
-        <button id="search-btn">Search</button>
-     </div>
-
-     <table id="table">
-         <thead>
-             <th>Id</th>
-             <th>Name</th>
-             <th>Date Added</th>
-             <th>Delete</th>
-             <th>Edit</th>  
-         </thead>
-         <tbody></tbody>
-     </table>
-
-     <section hidden id="update-row">
-         <label>Name:</label>
-         <input type="text" id="update-name-input">
-         <button id="update-row-btn" value="">Update</button>
-    </section>
-</main>
-<script src="index.js"></script>
-</body>
-</html>
+<pre id="user-results" style="background:#f5f5f5;padding:8px;"></pre>
