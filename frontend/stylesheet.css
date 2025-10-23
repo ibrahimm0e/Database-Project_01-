@@ -1,0 +1,187 @@
+/* ========== Global Styles ========== */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* ========== Headings ========== */
+h1, h2, h3, h4 {
+  color: #007bff;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* ========== Labels, Inputs, and Buttons ========== */
+label {
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="password"] {
+  padding: 8px 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 15px;
+  width: 200px;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0,123,255,0.4);
+  outline: none;
+}
+
+button {
+  padding: 8px 14px;
+  margin: 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 15px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* ========== Table Styles ========== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 25px;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th, td {
+  border: 1px solid #e2e2e2;
+  text-align: left;
+  padding: 12px 10px;
+  font-size: 15px;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.no-data {
+  text-align: center;
+  font-style: italic;
+  color: #777;
+}
+
+/* ========== Update Section ========== */
+#update-row {
+  margin-top: 30px;
+  padding: 15px;
+  background-color: #fff8e1;
+  border: 1px solid #ffeb3b;
+  border-radius: 8px;
+}
+
+/* ========== Layout Helpers ========== */
+div {
+  margin-bottom: 10px;
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  main {
+    padding: 15px;
+  }
+
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  th {
+    display: none;
+  }
+
+  td {
+    position: relative;
+    padding-left: 50%;
+  }
+
+  td::before {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 45%;
+    font-weight: 600;
+    color: #007bff;
+    content: attr(data-label);
+  }
+
+  input, button {
+    width: 100%;
+  }
+}
+
+
+/* ========== Results Table (for User Auth & Search) ========== */
+#results {
+  margin-top: 30px;
+}
+
+#results-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#results-table th,
+#results-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+#results-table th {
+  background-color: #007bff;
+  color: #fff;
+}
+
+#results-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#results-table tr:hover {
+  background-color: #f1f1f1;
+  transition: 0.3s;
+}

@@ -1,55 +1,95 @@
-<hr/>
-<h3>User Auth & Search (demo)</h3>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ibrahim  && Ikbal </title>
+  <title>User Auth & Search</title>
+<link rel="stylesheet" href="./stylesheet.css" />
 
-<section id="register">
-  <h4>Register</h4>
-  <input id="r-username" placeholder="username">
-  <input id="r-password" placeholder="password" type="password">
-  <input id="r-first" placeholder="first name">
-  <input id="r-last" placeholder="last name">
-  <input id="r-salary" placeholder="salary" type="number" step="0.01">
-  <input id="r-age" placeholder="age" type="number">
-  <button id="btn-register">Register</button>
-</section>
+</head>
+<body>
+  <main>
+    <hr />
+    <h3>User Auth & Search (demo)</h3>
 
-<section id="login">
-  <h4>Sign In</h4>
-  <input id="l-username" placeholder="username">
-  <input id="l-password" placeholder="password" type="password">
-  <button id="btn-login">Login</button>
-</section>
+    <!-- ================= Register ================= -->
+    <section id="register">
+      <h4>Register</h4>
+      <input id="r-username" placeholder="username" />
+      <input id="r-password" placeholder="password" type="password" />
+      <input id="r-first" placeholder="first name" />
+      <input id="r-last" placeholder="last name" />
+      <input id="r-salary" placeholder="salary" type="number" step="0.01" />
+      <input id="r-age" placeholder="age" type="number" />
+      <button id="btn-register" type="button">Register</button>
+    </section>
 
-<section id="user-searches">
-  <h4>Searches</h4>
-  <div>
-    <input id="s-first" placeholder="first (optional)">
-    <input id="s-last" placeholder="last (optional)">
-    <button id="btn-search-firstlast">Search by first/last</button>
-  </div>
-  <div>
-    <input id="s-username" placeholder="username">
-    <button id="btn-search-username">By username</button>
-  </div>
-  <div>
-    <input id="s-sal-min" placeholder="salary min" type="number" step="0.01">
-    <input id="s-sal-max" placeholder="salary max" type="number" step="0.01">
-    <button id="btn-search-salary">By salary range</button>
-  </div>
-  <div>
-    <input id="s-age-min" placeholder="age min" type="number">
-    <input id="s-age-max" placeholder="age max" type="number">
-    <button id="btn-search-age">By age range</button>
-  </div>
-  <div>
-    <input id="s-after-username" placeholder="registered after (username)">
-    <button id="btn-search-after">Registered after</button>
-  </div>
-  <div>
-    <button id="btn-never-signed">Never signed in</button>
-    <input id="s-same-username" placeholder="same day as (username)">
-    <button id="btn-same-day">Same day as</button>
-    <button id="btn-today">Registered today</button>
-  </div>
-</section>
+    <!-- ================= Login ================= -->
+    <section id="login" style="margin-top: 16px;">
+      <h4>Sign In</h4>
+      <input id="l-username" placeholder="username" />
+      <input id="l-password" placeholder="password" type="password" />
+      <button id="btn-login" type="button">Login</button>
+    </section>
 
-<pre id="user-results" style="background:#f5f5f5;padding:8px;"></pre>
+    <!-- ================= Searches ================= -->
+    <section id="user-searches" style="margin-top: 16px;">
+      <h4>Searches</h4>
+      <div>
+        <input id="s-first" placeholder="first (optional)" />
+        <input id="s-last" placeholder="last (optional)" />
+        <button id="btn-search-firstlast" type="button">Search by first/last</button>
+      </div>
+      <div>
+        <input id="s-username" placeholder="username" />
+        <button id="btn-search-username" type="button">By username</button>
+      </div>
+      <div>
+        <input id="s-sal-min" placeholder="salary min" type="number" step="0.01" />
+        <input id="s-sal-max" placeholder="salary max" type="number" step="0.01" />
+        <button id="btn-search-salary" type="button">By salary range</button>
+      </div>
+      <div>
+        <input id="s-age-min" placeholder="age min" type="number" />
+        <input id="s-age-max" placeholder="age max" type="number" />
+        <button id="btn-search-age" type="button">By age range</button>
+      </div>
+      <div>
+        <input id="s-after-username" placeholder="registered after (username)" />
+        <button id="btn-search-after" type="button">Registered after</button>
+      </div>
+      <div>
+        <button id="btn-never-signed" type="button">Never signed in</button>
+        <input id="s-same-username" placeholder="same day as (username)" />
+        <button id="btn-same-day" type="button">Same day as</button>
+        <button id="btn-today" type="button">Registered today</button>
+      </div>
+    </section>
+
+    <!-- ================= Results ================= -->
+    <section id="results" style="margin-top: 20px;">
+      <h4>Results</h4>
+      <table id="results-table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Salary</th>
+            <th>Age</th>
+            <th>Register Day</th>
+            <th>Sign-in Time</th>
+          </tr>
+        </thead>
+        <tbody id="results-body">
+          <tr><td colspan="7" class="no-data">No results yet</td></tr>
+        </tbody>
+      </table>
+      <pre id="user-results" style="background: #f5f5f5; padding: 8px;"></pre>
+    </section>
+  </main>
+
+  <script src="index.js"></script>
+</body>
+</html>
