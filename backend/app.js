@@ -1,145 +1,162 @@
-// Backend: application services, accessible by URIs
-
-
-const express = require('express')
-const cors = require ('cors')
-const dotenv = require('dotenv')
-dotenv.config()
+// app.js
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const app = express();
-
 const dbService = require('./dbService');
 
-
 app.use(cors());
-app.use(express.json())
-app.use(express.urlencoded({extended: false}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-// create
-app.post('/insert', (request, response) => {
-    console.log("app: insert a row.");
-    // console.log(request.body); 
-
-    const {name} = request.body;
-    const db = dbService.getDbServiceInstance();
-
-    const result = db.insertNewName(name);
- 
-    // note that result is a promise
-    result 
-    .then(data => response.json({data: data})) // return the newly added row to frontend, which will show it
-   // .then(data => console.log({data: data})) // debug first before return by response
-   .catch(err => console.log(err));
-});
-
-
-
-
-// read 
-app.get('/getAll', (request, response) => {
-    
-    const db = dbService.getDbServiceInstance();
-
-    
-    const result =  db.getAllData(); // call a DB function
-
-    result
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
-});
-
-
-app.get('/search/:name', (request, response) => { // we can debug by URL
-    
-    const {name} = request.params;
-    
-    console.log(name);
-
-    const db = dbService.getDbServiceInstance();
-
-    let result;
-    if(name === "all") // in case we want to search all
-       result = db.getAllData()
-    else 
-       result =  db.searchByName(name); // call a DB function
-
-    result
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
-});
-
-
-// update
-app.patch('/update', 
-     (request, response) => {
-          console.log("app: update is called");
-          //console.log(request.body);
-          const{id, name} = request.body;
-          console.log(id);
-          console.log(name);
-          const db = dbService.getDbServiceInstance();
-
-          const result = db.updateNameById(id, name);
-
-          result.then(data => response.json({success: true}))
-          .catch(err => console.log(err)); 
-
-     }
-);
-
-// delete service
-app.delete('/delete/:id', 
-     (request, response) => {     
-        const {id} = request.params;
-        console.log("delete");
-        console.log(id);
-        const db = dbService.getDbServiceInstance();
-
-        const result = db.deleteRowById(id);
-
-        result.then(data => response.json({success: true}))
-        .catch(err => console.log(err));
-     }
-)   
-
-// debug function, will be deleted later
-app.post('/debug', (request, response) => {
-    // console.log(request.body); 
-
-    const {debug} = request.body;
-    console.log(debug);
-
-    return response.json({success: true});
-});   
-
-// debug function: use http://localhost:5050/testdb to try a DB function
-// should be deleted finally
-app.get('/testdb', (request, response) => {
-    
-    const db = dbService.getDbServiceInstance();
-
-    
-    const result =  db.deleteById("14"); // call a DB function here, change it to the one you want
-
-    result
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
-});
-
-
-// set up the web server listener
-// if we use .env to configure
-/*
-app.listen(process.env.PORT, 
-    () => {
-        console.log("I am listening on the configured port " + process.env.PORT)
+// ===== AUTH =====
+app.post('/auth/register', async (req, res) => {
+  try {
+    const { username, password, firstname, lastname, salary, age } = req.body;
+    if (!username || !password || !firstname || !lastname) {
+      return res.status(400).json({ error: 'Missing required fields' });
     }
-);
-*/
+    const db = dbService.getDbServiceInstance();
 
-// if we configure here directly
-app.listen(5050, 
-    () => {
-        console.log("I am listening on the fixed port 5050.")
-    }
-);
+    // prevent duplicate usernames
+    const exists = await db.getUserByUsername(username);
+    if (exists) return res.status(409).json({ error: 'Username already exists' });
+
+    const result = await db.registerUser({ username, password, firstname, lastname, salary, age });
+    res.json(result);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Registration failed' });
+  }
+});
+
+app.post('/auth/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const db = dbService.getDbServiceInstance();
+    const result = await db.signInUser({ username, password });
+    if (!result.success) return res.status(401).json(result);
+    res.json(result);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+// ===== USER SEARCHES =====
+
+// 1) first and/or last name
+// /users/search?first=John&last=Doe  (either param optional)
+app.get('/users/search', async (req, res) => {
+  try {
+    const db = dbService.getDbServiceInstance();
+    const { first, last } = req.query;
+    const rows = await db.searchUsersByFirstLast({ first: first || null, last: last || null });
+    res.json({ data: rows });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Search failed' });
+  }
+});
+
+// 2) by userid (username)
+app.get('/users/:username', async (req, res) => {
+  try {
+    const db = dbService.getDbServiceInstance();
+    const row = await db.getUserByUsername(req.params.username);
+    if (!row) return res.status(404).json({ error: 'Not found' });
+    // hide password
+    const { password, ...safe } = row;
+    res.json({ data: safe });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Lookup failed' });
+  }
+});
+
+// 3) salary between X and Y
+app.get('/users/salary/range', async (req, res) => {
+  try {
+    const { min, max } = req.query;
+    if (min == null || max == null) return res.status(400).json({ error: 'min and max required' });
+    const db = dbService.getDbServiceInstance();
+    const rows = await db.searchUsersBySalaryRange(Number(min), Number(max));
+    res.json({ data: rows });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Search failed' });
+  }
+});
+
+// 4) age between X and Y
+app.get('/users/age/range', async (req, res) => {
+  try {
+    const { min, max } = req.query;
+    if (min == null || max == null) return res.status(400).json({ error: 'min and max required' });
+    const db = dbService.getDbServiceInstance();
+    const rows = await db.searchUsersByAgeRange(Number(min), Number(max));
+    res.json({ data: rows });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Search failed' });
+  }
+});
+
+// 5) registered after john (by userid)
+app.get('/users/registered-after/:username', async (req, res) => {
+  try {
+    const db = dbService.getDbServiceInstance();
+    const rows = await db.registeredAfter(req.params.username);
+    res.json({ data: rows });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Search failed' });
+  }
+});
+
+// 6) never signed in
+app.get('/users/never-signed-in', async (req, res) => {
+  try {
+    const db = dbService.getDbServiceInstance();
+    const rows = await db.neverSignedIn();
+    res.json({ data: rows });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Search failed' });
+  }
+});
+
+// 7) registered same day as john
+app.get('/users/same-day-as/:username', async (req, res) => {
+  try {
+    const db = dbService.getDbServiceInstance();
+    const rows = await db.sameDayAs(req.params.username);
+    res.json({ data: rows });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Search failed' });
+  }
+});
+
+// 8) registered today
+app.get('/users/registered-today', async (req, res) => {
+  try {
+    const db = dbService.getDbServiceInstance();
+    const rows = await db.registeredToday();
+    res.json({ data: rows });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Search failed' });
+  }
+});
+
+// ======== KEEP your existing demo routes below ========
+
+// ... your /insert, /getAll, /search/:name, /update, /delete/:id, /debug, /testdb etc ...
+
+// Listener (use env if you prefer)
+app.listen(5050, () => {
+  console.log('I am listening on the fixed port 5050.');
+});
