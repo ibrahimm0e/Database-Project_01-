@@ -1,7 +1,7 @@
 // dbService.js
 const mysql = require('mysql');
 const dotenv = require('dotenv');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 dotenv.config();
 
 let instance = null;
